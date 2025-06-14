@@ -10,8 +10,12 @@ typedef enum {
     AST_PRINT,
     AST_BINARY_OP,
     AST_LITERAL,
-    AST_VARIABLE
+    AST_VARIABLE,
+    AST_UNARY_OP
 } ASTNodeType;
+
+const char* ast_type_to_str(ASTNodeType type);
+
 
 typedef struct ASTNode {
     ASTNodeType type;
@@ -27,6 +31,11 @@ typedef struct ASTNode {
             struct ASTNode* value;
         } assign;
 
+        struct {
+            TokenType op;
+            struct ASTNode* operand;
+        } unary_op;
+            
         struct {
             struct ASTNode* expression;
         } print;
@@ -55,6 +64,7 @@ ASTNode* create_print_node(ASTNode* expr);
 ASTNode* create_binary_op_node(TokenType op, ASTNode* left, ASTNode* right);
 ASTNode* create_literal_node(int value);
 ASTNode* create_variable_node(const char* name);
+ASTNode* create_unary_op_node(TokenType op, ASTNode* operand);
 void print_ast(ASTNode* root);
 void free_ast(ASTNode* node);
 
