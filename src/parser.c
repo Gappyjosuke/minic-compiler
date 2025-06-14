@@ -8,7 +8,7 @@
 static TokenNode* current;
 
 // Advance to next token
-static ASTNode* advance() {
+static void advance() {
     if (current != NULL)
         current = current->next;
 }
@@ -48,7 +48,7 @@ ASTNode* parse_program(TokenNode* tokens) {
 
 // statement → declaration | print_statement | assignment
 ASTNode* parse_statement() {
-    if (match(TOKEN_INT)) {
+    if (match(TOKEN_INT) || match(TOKEN_LET)) {
         if (current->token.type == TOKEN_IDENTIFIER) {
             char* name = strdup(current->token.lexeme);
             advance();
@@ -71,6 +71,7 @@ ASTNode* parse_statement() {
             exit(1);
         }
     }
+    
 
     if (current->token.type == TOKEN_IDENTIFIER) {
         char* name = strdup(current->token.lexeme);
@@ -118,7 +119,7 @@ ASTNode* parse_statement() {
 
 
 static ASTNode* parse_expression() {
-    ASTNode* parse_term();
+    ASTNode* left = parse_term();
     while (current->token.type == TOKEN_PLUS) {
         TokenType op = current->token.type;
         advance();
