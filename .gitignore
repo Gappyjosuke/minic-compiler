@@ -1,0 +1,8 @@
+# Ignore build artifacts
+*.o
+*.out
+*.exe
+*.obj
+
+# Backup files
+*~
