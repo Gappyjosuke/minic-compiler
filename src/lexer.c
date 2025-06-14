@@ -17,7 +17,7 @@ const char* token_type_to_string(TokenType type) {
         case TOKEN_IDENTIFIER: return "identifier";
         case TOKEN_INT: return "int";
         case TOKEN_LET: return "let";
-        case TOKEN_LPAREN: return "()";
+        case TOKEN_LPAREN: return "(";
         case TOKEN_NUMBER: return "number";
         case TOKEN_PRINT: return "print";
         case TOKEN_RPAREN: return ")";
@@ -77,6 +77,9 @@ TokenNode* tokenize(const char* input) {
                 case '(': token.type = TOKEN_LPAREN; token.lexeme[0] = '('; token.lexeme[1] = '\0'; p++; break;
                 case ')': token.type = TOKEN_RPAREN; token.lexeme[0] = ')'; token.lexeme[1] = '\0'; p++; break;
                 case ';': token.type = TOKEN_SEMICOLON; token.lexeme[0] = ';'; token.lexeme[1] = '\0'; p++; break;
+                case '-': token.type = TOKEN_MINUS; token.lexeme[0] = '-'; token.lexeme[1] = '\0'; p++; break;
+                case '*': token.type = TOKEN_STAR; token.lexeme[0] = '*'; token.lexeme[1] = '\0'; p++; break;
+                case '/': token.type = TOKEN_SLASH; token.lexeme[0] = '/'; token.lexeme[1] = '\0'; p++; break;
                 default: p++; continue;
             }
         }
