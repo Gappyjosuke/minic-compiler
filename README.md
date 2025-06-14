@@ -46,18 +46,7 @@ Focused on clarity, structure, and educational value.
     - Node types: `VarDecl`, `Print`, `BinaryOp`, `UnaryOp`, `Literal`, `Variable`
     - Visual debug output via `print_ast()`    
   - Prints structured AST for debugging/visual verification:
-  ```text
-   AST:
-   AST: VarDecl x = ...
-   BinaryOp(+)
-   Left: AST: Literal 2
-   Right: BinaryOp(*)
-   Left: AST: Literal 3
-   Right: BinaryOp(-)
-   Left: AST: Literal 4
-   Right: AST: Literal 1
-   AST: Print AST: Variable x 
-  ```
+
 - **Evaluator / Interpreter**-
 - Walks the AST and executes statements
 - Supports:
@@ -72,7 +61,7 @@ Focused on clarity, structure, and educational value.
    - Source: `.minic` files
    - Output: Token stream with lexemes and token types
 
-### Planned
+## Planned
 
 - [ ] **Error Reporting**
   - Improve syntax/runtime messages with line and column context
@@ -84,6 +73,47 @@ Focused on clarity, structure, and educational value.
 - [ ] **Code Generation (optional)**  
   Generate pseudo-assembly or VM bytecode for portability or optimization
 
+## Output Temp
+```text
+ Raw input starts with: let x = 2 + 3 * (4 - 1);
+ print(x);
+ Token: let          Lexeme: let        Value: 0
+ Token: identifier   Lexeme: x          Value: 0
+ Token: =            Lexeme: =          Value: 0
+ Token: number       Lexeme: 2          Value: 2
+ Token: +            Lexeme: +          Value: 0
+ Token: number       Lexeme: 3          Value: 3
+ Token: *            Lexeme: *          Value: 0
+ Token: (            Lexeme: (          Value: 0
+ Token: number       Lexeme: 4          Value: 4
+ Token: -            Lexeme: -          Value: 0
+ Token: number       Lexeme: 1          Value: 1
+ Token: )            Lexeme: )          Value: 0
+ Token: ;            Lexeme: ;          Value: 0
+ Token: print        Lexeme: print      Value: 0
+ Token: (            Lexeme: (          Value: 0
+ Token: identifier   Lexeme: x          Value: 0
+ Token: )            Lexeme: )          Value: 0
+ Token: ;            Lexeme: ;          Value: 0
+ Token: EOF          Lexeme: EOF        Value: 0
+ [DEBUG] Created binary op node, type = 3, op = 5
+ [DEBUG] Created binary op node, type = 3, op = 6
+ [DEBUG] Created binary op node, type = 3, op = 4
+ 
+ AST:
+ AST: VarDecl x = ...
+ BinaryOp(+)
+  Left: AST: Literal 2
+  Right: BinaryOp(*)
+  Left: AST: Literal 3
+  Right: BinaryOp(-)
+  Left: AST: Literal 4
+  Right: AST: Literal 1
+  AST: Print AST: Variable x
+
+ Output:
+ 11
+```
 
 ## Installation
 
