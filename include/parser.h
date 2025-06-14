@@ -2,7 +2,8 @@
 #define PARSER_H
 
 #include "lexer.h"
+#include "ast.h"
 
-void parse_program(TokenNode* tokens);
+ASTNode* parse_program(TokenNode* tokens);
 
 #endif

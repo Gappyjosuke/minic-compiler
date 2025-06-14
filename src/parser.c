@@ -23,128 +23,125 @@ static int match(TokenType type) {
 }
 
 // Forward declarations
-ASTNode* parse_statement();
-ASTNode* parse_expression();
-ASTNode* parse_term();
+static ASTNode* parse_statement();
+static ASTNode* parse_expression();
+static ASTNode* parse_term();
 
 // Entry point
 ASTNode* parse_program(TokenNode* tokens) {
     current = tokens;
-    ASTNode* program = create_node(AST_PROGRAM);
+    ASTNode* head = NULL;
+    ASTNode* tail = NULL;
 
     while (current != NULL && current->token.type != TOKEN_EOF) {
-      ASTNode* stmt = parse_statement();
-      if (stmt) {
-        add_child(program, stmt);
-      }
+        ASTNode* stmt = parse_statement();
+
+        if (head == NULL) {
+            head = tail = stmt;
+        } else {
+            tail->next = stmt;
+            tail = stmt;
+        }
     }
-    return program;
+    return head;
 }
 
 // statement → declaration | print_statement | assignment
 ASTNode* parse_statement() {
     if (match(TOKEN_INT)) {
         if (current->token.type == TOKEN_IDENTIFIER) {
-            ASTNode* decl = create_node(AST_VAR_DECL);
-            decl->name = strdup(current->token.lexeme);
+            char* name = strdup(current->token.lexeme);
             advance();
 
-            if (match(TOKEN_ASSIGN)) {
-                ASTNode* expr = parse_expression();
-                add_child(dec1, expr);
-
-                if (!match(TOKEN_SEMICOLON)) {
-                    fprintf(stderr, "Syntax Error: Expected ';'\n");
-                    exit(1);
-                }
-            } else {
-                fprintf(stderr, "Syntax Error: Expected '='\n");
+            if (!match(TOKEN_ASSIGN)) {
+                fprintf(stderr, "Syntax Error: Expected '=' after identifier\n");
                 exit(1);
             }
 
-            return dec1;
+            ASTNode* value = parse_expression();
+
+            if (!match(TOKEN_SEMICOLON)) {
+                fprintf(stderr, "Syntax Error: Expected ';'\n");
+                exit(1);
+            }
+
+            return create_var_decl_node(name, value);
         } else {
             fprintf(stderr, "Syntax Error: Expected identifier after 'int'\n");
             exit(1);
         }
     }
-    else if (current->token.type == TOKEN_IDENTIFIER ) {
-        ASTNode* assign = create_node(AST_ASSIGN);
-        assign->name = strdup(current->token.lexeme);
+
+    if (current->token.type == TOKEN_IDENTIFIER) {
+        char* name = strdup(current->token.lexeme);
         advance();
-        
 
-        if (match(TOKEN_ASSIGN)) {
-            ASTNode* expr = parse_expression();
-            add_child(assign, expr);
-
-            if (!match(TOKEN_SEMICOLON)) {
-                fprintf(stderr, "Syntax Error: Expected ';'\n");
-                exit(1);
-            }
-
-            return assign;
-        } else {
-            fprintf(stderr, "Syntax Error: Expected '=' after identifier '%s'\n", assign->name);
+        if (!match(TOKEN_ASSIGN)) {
+            fprintf(stderr, "Syntax Error: Expected '=' after identifier '%s'\n", name);
             exit(1);
         }
-    } else if (match(TOKEN_PRINT)) {
-        if (match(TOKEN_LPAREN)) {
-            ASTNode* print = create_node(AST_PRINT);
-            ASTNode* expr = parse_expression();
-            add_child(print, expr);
 
-            if (!match(TOKEN_RPAREN)) {
-                fprintf(stderr, "Syntax Error: Expected ')'\n");
-                exit(1);
-            }
-            if (!match(TOKEN_SEMICOLON)) {
-                fprintf(stderr, "Syntax Error: Expected ';'\n");
-                exit(1);
-            }
+        ASTNode* value = parse_expression();
 
-            return print;
-        } else {
+        if (!match(TOKEN_SEMICOLON)) {
+            fprintf(stderr, "Syntax Error: Expected ';'\n");
+            exit(1);
+        }
+
+        return create_assign_node(name, value);
+    }
+
+    if (match(TOKEN_PRINT)) {
+        if (!match(TOKEN_LPAREN)) {
             fprintf(stderr, "Syntax Error: Expected '('\n");
             exit(1);
         }
-    } else {
-        fprintf(stderr, "Syntax Error: Unknown statement at token '%s'\n", current->token.lexeme);
-        exit(1);
+
+        ASTNode* expr = parse_expression();
+
+        if (!match(TOKEN_RPAREN)) {
+            fprintf(stderr, "Syntax Error: Expected ')'\n");
+            exit(1);
+        }
+
+        if (!match(TOKEN_SEMICOLON)) {
+            fprintf(stderr, "Syntax Error: Expected ';'\n");
+            exit(1);
+        }
+
+        return create_print_node(expr);
     }
 
-    return NULL;
+    fprintf(stderr, "Syntax Error: Unknown statement at token '%s'\n", current->token.lexeme);
+    exit(1);
 }
 
 
-ASTNode* parse_expression() {
+static ASTNode* parse_expression() {
     ASTNode* parse_term();
-    while (current != NULL && current->token.type == TOKEN_PLUS) {
+    while (current->token.type == TOKEN_PLUS) {
+        TokenType op = current->token.type;
         advance();
         ASTNode* right = parse_term();
-        op->op = strdup("+");
-        add_child(op, left);
-        add_child(op, right);
-        left = op;
+        left = create_binary_op_node(op,left,right);
     }
 
     return left;
 }
 
 
-ASTNode* parse_term() {
+static ASTNode* parse_term() {
     if(current->token.type == TOKEN_NUMBER ) {
-        ASTNode* num = create_node(AST_LITERAL);
-        num->value = current->token.value;
+        int val = current->token.value;
         advance();
-        return num;
-    } else if (current->token.type == TOKEN_IDENTIFIER) {
-        ASTNode* id = create_node(AST_IDENTIFIER);
-        id->name = strdup(current->token.lexeme);
-        advance();
-        return id;
-    } else {
-        fprintf(stderr, "Syntax Error: Expected number or identifier\n");
-        exit(1);
+        return create_literal_node(val);
     }
+    if (current->token.type == TOKEN_IDENTIFIER) {
+        char* name = strdup(current->token.lexeme);
+        advance();
+        return create_variable_node(name);
+    } 
+    fprintf(stderr, "Syntax Error: Expected number or identifier\n");
+    exit(1);
 }
+
