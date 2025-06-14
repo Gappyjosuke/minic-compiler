@@ -8,11 +8,14 @@ typedef enum {
     TOKEN_ASSIGN,
     TOKEN_NUMBER,
     TOKEN_PLUS,
+    TOKEN_MINUS,
+    TOKEN_STAR,
     TOKEN_PRINT,
     TOKEN_LPAREN,
     TOKEN_RPAREN,
     TOKEN_SEMICOLON,
     TOKEN_LET,
+    TOKEN_SLASH,
     TOKEN_EOF
 } TokenType;
 
@@ -27,7 +30,7 @@ typedef struct TokenNode {
     struct TokenNode* next;
 } TokenNode;
 
-const char* token_type_to_string(TokenType type); 
+const char* token_type_to_string(TokenType type);
 
 TokenNode* tokenize(const char* source_code);
 TokenNode* tokenize_file(const char* filename);
