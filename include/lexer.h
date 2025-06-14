@@ -1,7 +1,6 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include <stdio.h>
 
 typedef enum {
     TOKEN_INT,
@@ -13,6 +12,7 @@ typedef enum {
     TOKEN_LPAREN,
     TOKEN_RPAREN,
     TOKEN_SEMICOLON,
+    TOKEN_LET,
     TOKEN_EOF
 } TokenType;
 
@@ -27,8 +27,11 @@ typedef struct TokenNode {
     struct TokenNode* next;
 } TokenNode;
 
-TokenNode* tokenize(const char* input);
-void print_tokens(TokenNode* head);
+const char* token_type_to_string(TokenType type); 
+
+TokenNode* tokenize(const char* source_code);
+TokenNode* tokenize_file(const char* filename);
+void free_tokens(TokenNode* head);
 void free_tokens(TokenNode* head);
 
 #endif
