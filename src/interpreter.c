@@ -3,6 +3,8 @@
 #include <string.h>
 #include "../include/interpreter.h"
 #include "../include/ast.h"
+#include "../include/lexer.h"
+
 
 typedef struct Variable {
     char name[64];
@@ -41,21 +43,29 @@ int get_variable(const char* name) {
 
 int eval_expr(ASTNode* expr) {
     switch (expr->type) {
-        case AST_NUMBER_LITERAL:
-            return expr->number.value;
-        case AST_IDENTIFIER:
-            return get_variable(expr->identifier.name);
-        case AST_BINARY_EXPR: {
-            int left = eval_expr(expr->binary.left);
-            int right = eval_expr(expr->binary.right);
-            if (strcmp(expr->binary.op, "+") == 0)
-                return left + right;
-            fprintf(stderr, "Unsupported operator: %s\n", expr->binary.op);
-            exit(1);
+        case AST_LITERAL:
+            return expr->literal.value;
+        case AST_VARIABLE: 
+            return get_variable(expr->variable.name);
+        
+        case AST_BINARY_OP: {
+            int left = eval_expr(expr->binary_op.left);
+            int right = eval_expr(expr->binary_op.right);
+            
+            switch (expr->binary_op.op) {
+               case TOKEN_PLUS: return left + right;
+               case TOKEN_MINUS: return left - right;
+               case TOKEN_STAR: return left * right;
+               case TOKEN_SLASH: return right != 0 ? left / right : (fprintf(stderr, "Division by zero\n"), exit(1), 0);
+               default:
+                fprintf(stderr, "Unsupported operator: %s\n", token_type_to_string(expr->binary_op.op));
+                exit(1);
+            }
         }
         default:
-            fprintf(stderr, "Unknown expression type\n");
-            exit(1);
+        fprintf(stderr, "Unknown expression type:%d\n",expr->type);
+        exit(1);
+        
     }
 }
 

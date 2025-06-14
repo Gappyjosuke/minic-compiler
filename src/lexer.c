@@ -8,18 +8,21 @@
 
 const char* token_type_to_string(TokenType type) {
     switch (type) {
-        case TOKEN_INT: return "TOKEN_INT";
-        case TOKEN_IDENTIFIER: return "TOKEN_IDENTIFIER";
-        case TOKEN_NUMBER: return "TOKEN_NUMBER";
-        case TOKEN_ASSIGN: return "TOKEN_ASSIGN";
-        case TOKEN_SEMICOLON: return "TOKEN_SEMICOLON";
-        case TOKEN_PRINT: return "TOKEN_PRINT";
-        case TOKEN_LPAREN: return "TOKEN_LPAREN";
-        case TOKEN_RPAREN: return "TOKEN_RPAREN";
-        case TOKEN_PLUS: return "TOKEN_PLUS";
-        case TOKEN_EOF: return "TOKEN_EOF";
-        case TOKEN_LET: return "TOKEN_LET";
-        default: return "UNKNOWN";
+        case TOKEN_PLUS: return "+";
+        case TOKEN_MINUS: return "-";
+        case TOKEN_STAR: return "*";
+        case TOKEN_SLASH: return "/";
+        case TOKEN_ASSIGN: return "=";
+        case TOKEN_EOF: return "EOF";
+        case TOKEN_IDENTIFIER: return "identifier";
+        case TOKEN_INT: return "int";
+        case TOKEN_LET: return "let";
+        case TOKEN_LPAREN: return "()";
+        case TOKEN_NUMBER: return "number";
+        case TOKEN_PRINT: return "print";
+        case TOKEN_RPAREN: return ")";
+        case TOKEN_SEMICOLON: return ";";
+        default: return "unknown";
     }
 }
 
