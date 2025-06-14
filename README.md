@@ -47,17 +47,17 @@ Focused on clarity, structure, and educational value.
     - Visual debug output via `print_ast()`    
   - Prints structured AST for debugging/visual verification:
     ```text
-  AST:
-  AST: VarDecl x = ...
-  BinaryOp(+)
-  Left: AST: Literal 2
-  Right: BinaryOp(*)
-  Left: AST: Literal 3
-  Right: BinaryOp(-)
-  Left: AST: Literal 4
-  Right: AST: Literal 1
- AST: Print AST: Variable x 
-```
+   AST:
+   AST: VarDecl x = ...
+   BinaryOp(+)
+   Left: AST: Literal 2
+   Right: BinaryOp(*)
+   Left: AST: Literal 3
+   Right: BinaryOp(-)
+   Left: AST: Literal 4
+   Right: AST: Literal 1
+  AST: Print AST: Variable x 
+  ```
 - **Evaluator / Interpreter**-
 - Walks the AST and executes statements
 - Supports:
