@@ -1,4 +1,2 @@
-let x = 10;
-let y = 20;
-let z = x + y;
-print(z);
+let x = 2 + 3 * (4 - 1);
+print(x);
