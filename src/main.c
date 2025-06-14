@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
     ASTNode* ast = parse_program(tokens);
 
     //Print AST (just debug-print)
-    printf("\nAST:\n"):
+    printf("\nAST:\n");
     print_ast(ast);
 
     //cleanup
