@@ -5,21 +5,21 @@ Focused on clarity, structure, and educational value.
 
 ## Project Overview
 
-- Type: Educational Compiler Project
-- Language: C
-- Goal: Build a simplified C compiler from scratch
-- Design: Single-pass, modular phases
+- **Type**: Educational / Experimental Compiler
+- **Language**: C
+- **Architecture**: Single-pass, modular (Lexer → Parser → AST → Interpreter)
+- **Goal**: Understand compiler fundamentals by building a simplified C-like interpreter from scratc
 
 ## Current Phase
 
 
-- [x] Lexer: Tokenize basic MiniC syntax
-- [x] Parser: Parse declarations, expressions, print statements
-- [x] AST: Build and debug-print AST
-- [ ] Evaluator: Interpret the AST and execute code
-- [ ] Error Handling: Clear syntax/runtime error reporting
-- [ ] Type System (optional): Add basic types like `int`, `string`
-- [ ] Codegen (optional): Generate assembly or bytecode
+- [x] Lexer: Tokenizes input using keywords, operators, symbols  
+- [x] Parser: Parses expressions and statements, builds AST  
+- [x] AST: Structured representation for evaluation  
+- [x] Evaluator: Interprets AST and executes MiniC code  
+- [ ] Error Handling: Add user-friendly syntax/runtime diagnostics  
+- [ ] Type System (optional): Add support for `int`, `string`, and type checks  
+- [ ] Codegen (optional): Generate assembly or bytecode for executio
 
 ## Features
 
@@ -33,25 +33,40 @@ Focused on clarity, structure, and educational value.
   - Enhanced whitespace skipping and file-reading
   - Classifies `let` as `TOKEN_LET
 
-- **Recursive Descent Parser**
-  - Parses simple expressions and statements
-  - Checks syntax correctness
-  - Builds a base structure for upcoming AST generation
+- **Parser**
+  - Recursive descent parsing
+  - Supports:
+    - Variable declarations using `let`
+    - Arithmetic expressions with proper precedence
+    - Assignment and `print(...)` statements
+  - Constructs AST for each parsed input
 
 - **AST Generation & Printer**
   - Builds AST nodes for:
-    - Variable declarations (`VarDecl`)
-    - Print statements
-    - Binary and assignment expressions
-  
+    - Node types: `VarDecl`, `Print`, `BinaryOp`, `UnaryOp`, `Literal`, `Variable`
+    - Visual debug output via `print_ast()`    
   - Prints structured AST for debugging/visual verification:
     ```text
-    AST:
-    AST: VarDecl x = ...
-    AST: VarDecl y = ...
-    AST: VarDecl z = ...
-    AST: Print (...)
-    ```
+  AST:
+  AST: VarDecl x = ...
+  BinaryOp(+)
+  Left: AST: Literal 2
+  Right: BinaryOp(*)
+  Left: AST: Literal 3
+  Right: BinaryOp(-)
+  Left: AST: Literal 4
+  Right: AST: Literal 1
+ AST: Print AST: Variable x 
+```
+- **Evaluator / Interpreter**-
+- Walks the AST and executes statements
+- Supports:
+  - Arithmetic evaluation
+  - Variable declaration, assignment, and usage
+  - Print statement execution
+- Detects runtime issues:
+  - Use of undefined variables
+  - Division by zero
 
 - **Input Support**
    - Source: `.minic` files
@@ -59,11 +74,9 @@ Focused on clarity, structure, and educational value.
 
 ### Planned
 
-- [ ] **Evaluator**  
-  Interpret the AST and execute the program directly (like a scripting language runtime)
-
-- [ ] **Error Handling**  
-  Clear syntax error messages and runtime error diagnostics
+- [ ] **Error Reporting**
+  - Improve syntax/runtime messages with line and column context
+  - Display source location in case of parse or runtime errors
 
 - [ ] **Type System (optional)**  
   Add support for basic types like `int`, `string`, and possibly type checking
