@@ -35,13 +35,14 @@ int main(int argc, char* argv[]) {
     printf("\nAST:\n");
     print_ast(ast);
 
+        // Interpret the program
+    printf("\nOutput:\n");
+    interpret(ast);
+    
     //cleanup
     free_ast(ast);
     free_tokens(tokens);
 
-    // Interpret the program
-    printf("\nOutput:\n");
-    interpret(ast);
 
     return 0;
 }
