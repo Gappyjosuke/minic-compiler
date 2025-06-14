@@ -3,6 +3,7 @@
 #include "../include/lexer.h"
 #include "../include/parser.h"
 #include "../include/ast.h"
+#include "../include/interpreter.h"
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -37,6 +38,10 @@ int main(int argc, char* argv[]) {
     //cleanup
     free_ast(ast);
     free_tokens(tokens);
+
+    // Interpret the program
+    printf("\nOutput:\n");
+    interpret(ast);
 
     return 0;
 }
