@@ -46,7 +46,7 @@ Focused on clarity, structure, and educational value.
     - Node types: `VarDecl`, `Print`, `BinaryOp`, `UnaryOp`, `Literal`, `Variable`
     - Visual debug output via `print_ast()`    
   - Prints structured AST for debugging/visual verification:
-    ```text
+  ```text
    AST:
    AST: VarDecl x = ...
    BinaryOp(+)
@@ -56,7 +56,7 @@ Focused on clarity, structure, and educational value.
    Right: BinaryOp(-)
    Left: AST: Literal 4
    Right: AST: Literal 1
-  AST: Print AST: Variable x 
+   AST: Print AST: Variable x 
   ```
 - **Evaluator / Interpreter**-
 - Walks the AST and executes statements
