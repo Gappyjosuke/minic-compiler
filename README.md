@@ -23,6 +23,12 @@ Focused on clarity, structure, and educational value.
 
 - Tokenizer
   - Handles keywords, identifiers, numbers, operators, delimiters
+
+- Recursive Descent Parser
+  - Parses simple expressions and statements
+  - Checks syntax correctness
+  - Builds a base structure for upcoming AST generation
+
 - Source: `.minic` files
 - Output: Token stream with lexemes and token types
 
