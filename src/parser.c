@@ -137,7 +137,7 @@ static ASTNode* parse_factor() {
 }
 
 
-// parse_term → parse_factor (* / chain)
+
 static ASTNode* parse_term() {
     ASTNode* left = parse_factor();
     while (current->token.type == TOKEN_STAR || current->token.type == TOKEN_SLASH) {
