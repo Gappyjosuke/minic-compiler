@@ -24,6 +24,8 @@ typedef struct {
     TokenType type;
     char lexeme[64];
     int value;
+    int line;
+    int column;
 } Token;
 
 typedef struct TokenNode {
