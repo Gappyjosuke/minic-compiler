@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include "../include/lexer.h"
 
+int debug_lexer = 0;
+
 // ---------------------- Token Type Name ----------------------
 
 const char* token_type_to_string(TokenType type) {
@@ -44,11 +46,36 @@ TokenNode* tokenize(const char* input) {
     head->next = NULL;
 
     const char* p = input;
-    printf("Raw input starts with: %.50s\n", p);
+    if (debug_lexer) {
+        printf("Raw input starts with: %.50s\n", p);
+    }
 
     while (*p) {
         while (isspace(*p)) p++;
 
+        // Skip single-line comments
+        if (*p == '/' && *(p + 1) == '/') {
+            while (*p && *p != '\n') p++; //skip till end of line
+            continue; //try next loop
+        }
+
+        // Skip block comments (/* ... */)
+        if (*p == '/' && *(p + 1) == '*') {
+            p += 2; // Skip the '/*'
+            while (*p && !(*p == '*' && *(p + 1) == '/')) {
+                p++;
+            }
+            if (*p == '*' && *(p + 1) == '/') {
+                p += 2; // Skip the closing */
+            } else { 
+                fprintf(stderr, "Unterminated block comment\n");
+                exit(1);
+            }
+            continue;
+        }
+
+
+        
         Token token;
         token.value = 0;
 
