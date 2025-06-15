@@ -4,6 +4,7 @@
 #include "../include/parser.h"
 #include "../include/ast.h"
 #include "../include/interpreter.h"
+#include "../include/semantic.h"
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -34,8 +35,12 @@ int main(int argc, char* argv[]) {
     //Print AST (just debug-print)
     printf("\nAST:\n");
     print_ast(ast);
+    
+    ASTNode* root = parse_program(tokens);
+    perform_semantic_analysis(root);
+    interpret(root);
 
-        // Interpret the program
+    // Interpret the program
     printf("\nOutput:\n");
     interpret(ast);
     
