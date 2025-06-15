@@ -1,0 +1,2 @@
+int a = x + 5;   // 'x' not declared
+print(a);
