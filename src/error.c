@@ -29,12 +29,15 @@ void parser_error(const char* message) {
     exit(1);
 }
 
-void parser_errorf(const char* fmt, ...) {
+void parser_errorf(Token token, const char* fmt, ...) {
+    fprintf(stderr, "[Parser Error] Line %d, Column %d: ", token.line, token.column);
+    
     va_list args;
     va_start(args, fmt);
-    fprintf(stderr, "[Parser Error] ");
+    
     vfprintf(stderr, fmt, args);
-    fprintf(stderr, "\n");
     va_end(args);
+    
+    fprintf(stderr, "\n");
     exit(1);
 }
