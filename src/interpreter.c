@@ -51,9 +51,7 @@ int eval_expr(ASTNode* expr) {
      exit(1);
     }
 
-    if (expr->type < 0 || expr->type > AST_VARIABLE) {
-        fprintf(stderr, "[SANITY] Invalid expr->type: %d (%s)\n", expr->type, ast_type_to_str(expr->type));
-    }
+
 
     switch (expr->type) {
         case AST_LITERAL:
@@ -103,6 +101,9 @@ void interpret(ASTNode* node) {
             case AST_VAR_DECL:
                 set_variable(node->var_decl.name, eval_expr(node->var_decl.value));
                 break;
+            case AST_ASSIGN:
+             set_variable(node->assign.name, eval_expr(node->assign.value));
+            break;            
             case AST_PRINT:
                 printf("%d\n", eval_expr(node->print.expression));
                 break;
