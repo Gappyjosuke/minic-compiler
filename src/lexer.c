@@ -46,76 +46,154 @@ TokenNode* tokenize(const char* input) {
     head->next = NULL;
 
     const char* p = input;
+    int line = 1;
+    int column = 1;
+
     if (debug_lexer) {
         printf("Raw input starts with: %.50s\n", p);
     }
 
     while (*p) {
-        while (isspace(*p)) p++;
+        
+        while (isspace(*p)) {
+            if (*p == '\n') {
+                line++;
+                column = 1;
+            } else {
+                column++;
+            }
+            p++;
+        }
+        // End of file after whitespace
+        if (*p == '\0') break;
 
         // Skip single-line comments
         if (*p == '/' && *(p + 1) == '/') {
-            while (*p && *p != '\n') p++; //skip till end of line
+            while (*p && *p != '\n') {
+                p++; //skip till end of line
+                column++;
+            }
             continue; //try next loop
         }
 
         // Skip block comments (/* ... */)
         if (*p == '/' && *(p + 1) == '*') {
             p += 2; // Skip the '/*'
+            column +=2;
             while (*p && !(*p == '*' && *(p + 1) == '/')) {
+                if (*p == '\n') {
+                    line++;
+                    column = 1;
+                } else {
+                    column++;
+                }
                 p++;
             }
             if (*p == '*' && *(p + 1) == '/') {
-                p += 2; // Skip the closing */
+                p += 2;
+                column +=2;
             } else { 
-                fprintf(stderr, "Unterminated block comment\n");
+                fprintf(stderr, "Unterminated block comment at line %d\n", line);
                 exit(1);
             }
             continue;
         }
-
-
         
+        // End of input
+        if (*p == '\0') break;
+
+
+        // Token template
         Token token;
         token.value = 0;
+        token.line = line;
+        token.column = column;
 
+
+        //Numbers
         if (isdigit(*p)) {
             char num[32];
             int len = 0;
-            while (isdigit(*p)) num[len++] = *p++;
+            while (isdigit(*p)){ 
+                num[len++] = *p++;
+                column++;
+            }
             num[len] = '\0';
             token.type = TOKEN_NUMBER;
             strcpy(token.lexeme, num);
             token.value = atoi(num);
-        } else if (isalpha(*p)) {
+        } 
+        //Identifiers and Keywords
+        else if (isalpha(*p)) {
             char id[64];
             int len = 0;
-            while (isalnum(*p)) id[len++] = *p++;
+            while (isalnum(*p)){ 
+                id[len++] = *p++;
+                column++;
+            }
             id[len] = '\0';
+
             if (strcmp(id, "int") == 0) token.type = TOKEN_INT;
             else if (strcmp(id, "print") == 0) token.type = TOKEN_PRINT;
             else if (strcmp(id, "let") == 0) token.type = TOKEN_LET;
             else token.type = TOKEN_IDENTIFIER;
             strcpy(token.lexeme, id);
-        } else {
+        } 
+        //Symbol and operators
+        else {
             switch (*p) {
-                case '=': token.type = TOKEN_ASSIGN; token.lexeme[0] = '='; token.lexeme[1] = '\0'; p++; break;
-                case '+': token.type = TOKEN_PLUS; token.lexeme[0] = '+'; token.lexeme[1] = '\0'; p++; break;
-                case '(': token.type = TOKEN_LPAREN; token.lexeme[0] = '('; token.lexeme[1] = '\0'; p++; break;
-                case ')': token.type = TOKEN_RPAREN; token.lexeme[0] = ')'; token.lexeme[1] = '\0'; p++; break;
-                case ';': token.type = TOKEN_SEMICOLON; token.lexeme[0] = ';'; token.lexeme[1] = '\0'; p++; break;
-                case '-': token.type = TOKEN_MINUS; token.lexeme[0] = '-'; token.lexeme[1] = '\0'; p++; break;
-                case '*': token.type = TOKEN_STAR; token.lexeme[0] = '*'; token.lexeme[1] = '\0'; p++; break;
-                case '/': token.type = TOKEN_SLASH; token.lexeme[0] = '/'; token.lexeme[1] = '\0'; p++; break;
-                default: p++; continue;
+                case '=':
+                    token.type = TOKEN_ASSIGN;
+                    strcpy(token.lexeme, "=");
+                    break;
+                case '+':
+                    token.type = TOKEN_PLUS;
+                    strcpy(token.lexeme, "+");
+                    break;
+                case '-':
+                    token.type = TOKEN_MINUS;
+                    strcpy(token.lexeme, "-");
+                    break;
+                case '*':
+                    token.type = TOKEN_STAR;
+                    strcpy(token.lexeme, "*");
+                    break;
+                case '/':
+                    token.type = TOKEN_SLASH;
+                    strcpy(token.lexeme, "/");
+                    break;
+                case '(':
+                    token.type = TOKEN_LPAREN;
+                    strcpy(token.lexeme, "(");
+                    break;
+                case ')':
+                    token.type = TOKEN_RPAREN;
+                    strcpy(token.lexeme, ")");
+                    break;
+                case ';':
+                    token.type = TOKEN_SEMICOLON;
+                    strcpy(token.lexeme, ";");
+                    break;
+                default:
+                    fprintf(stderr, "Unknown character '%c' at line %d, column %d\n", *p, line, column);
+                    p++;
+                    column++;
+                    continue;
             }
+            p++;
+            column++;
         }
 
         tail = add_token(tail, token);
     }
-
-    Token eof_token = { TOKEN_EOF, "EOF", 0 };
-    add_token(tail, eof_token);
+    //Add EOF token
+    Token eof_token;
+    eof_token.type = TOKEN_EOF;
+    strcpy(eof_token.lexeme, "EOF");
+    eof_token.value = 0;
+    eof_token.line = line;
+    eof_token.column = column;
+    add_token(tail, eof_token);    
 
     return head->next;
 }
@@ -154,10 +232,12 @@ TokenNode* tokenize_file(const char* filename) {
 void print_tokens(TokenNode* head) {
     TokenNode* current = head;
     while (current) {
-        printf("Token: %-12s Lexeme: %-10s Value: %d\n",
+        printf("Token: %-12s Lexeme: %-10s Value: %d (Line: %d, Col: %d)\n",
             token_type_to_string(current->token.type),
             current->token.lexeme,
-            current->token.value);
+            current->token.value,
+            current->token.line,
+            current->token.column);
         current = current->next;
     }
 }
