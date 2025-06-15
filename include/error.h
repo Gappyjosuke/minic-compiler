@@ -3,6 +3,12 @@
 #ifndef ERROR_H
 #define ERROR_H
 
+__attribute__((noreturn))
+void parser_error(const char* message);
+
+__attribute__((noreturn))
+void parser_errorf(const char* fmt, ...);
+
 // Report a syntax error and exit
 void syntax_error(const char* msg);
 
