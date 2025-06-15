@@ -23,3 +23,18 @@ void runtime_errorf(const char* fmt, ...) {
     va_end(args);
     exit(1);
 }
+
+void parser_error(const char* message) {
+    fprintf(stderr, "[Parser Error] %s\n", message);
+    exit(1);
+}
+
+void parser_errorf(const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    fprintf(stderr, "[Parser Error] ");
+    vfprintf(stderr, fmt, args);
+    fprintf(stderr, "\n");
+    va_end(args);
+    exit(1);
+}
