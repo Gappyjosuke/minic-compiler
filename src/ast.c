@@ -50,7 +50,12 @@ ASTNode* create_binary_op_node(TokenType op, ASTNode* left, ASTNode* right) {
     node->binary_op.left = left;
     node->binary_op.right = right;
     node->next = NULL;
-    printf("[DEBUG] Created binary op node, type = %d, op = %d\n", node->type, op);
+    
+    // Debug: Only if debug mode is enabled
+#ifdef DEBUG_PARSER
+    printf("[DEBUG][PARSER] Created binary op node, op = %d\n", op);
+ 
+#endif
     return node;
 }
 
