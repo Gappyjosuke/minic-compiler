@@ -3,29 +3,33 @@
 Lightweight compiler for a subset of the C language, written in C.  
 Focused on clarity, structure, and educational value.
 
+---
+
 ## Project Overview
 
 - **Type**: Educational / Experimental Compiler
 - **Language**: C
 - **Architecture**: Single-pass, modular (Lexer → Parser → AST → Interpreter)
-- **Goal**: Understand compiler fundamentals by building a simplified C-like interpreter from scratc
+- **Goal**: Understand compiler internals by building a minimal C-like interpreter from scratch
+
+---
 
 ## Current Phase
 
-
 - [x] Lexer: Tokenizes input using keywords, operators, symbols  
 - [x] Parser: Parses expressions and statements, builds AST  
-- [x] AST: Structured representation for evaluation  
-- [x] Evaluator: Interprets AST and executes MiniC code  
+- [x] AST: Structured representation for evaluation
+- [x] Interpreter: Walks AST and evaluates code
+- [x] Semantic Analysis: Basic checks for undeclared variables  
 - [ ] Error Handling: Add user-friendly syntax/runtime diagnostics  
 - [ ] Type System (optional): Add support for `int`, `string`, and type checks  
 - [ ] Codegen (optional): Generate assembly or bytecode for executio
 
+---
+
 ## Features
 
-### Implemented
-
-- **Lexer / Tokenizer**
+### Lexer
   - Supports keywords: `int`, `let`, `print`
   - Identifiers, numeric literals
   - Operators: `+`, `-`, `*`, `/`, `=`
@@ -33,19 +37,24 @@ Focused on clarity, structure, and educational value.
   - Enhanced whitespace skipping and file-reading
   - Classifies `let` as `TOKEN_LET
 
-- **Parser**
+---
+
+### Parser
   - Recursive descent parsing
   - Supports:
-    - Variable declarations using `let`
-    - Arithmetic expressions with proper precedence
-    - Assignment and `print(...)` statements
+    - `let x = expr;` declarations
+    - `x = expr;` assignments
+    - `print(expr);` statements
+    - Arithmetic: `+`, `-`, `*`, `/`, nested precedence
   - Constructs AST for each parsed input
 
-- **AST Generation & Printer**
-  - Builds AST nodes for:
-    - Node types: `VarDecl`, `Print`, `BinaryOp`, `UnaryOp`, `Literal`, `Variable`
-    - Visual debug output via `print_ast()`    
-  - Prints structured AST for debugging/visual verification:
+---
+
+### AST Generation + Debug Printer
+  - Node Types:
+    - `VarDecl`, `Assign`, `Print`
+    - `BinaryOp`, `UnaryOp`, `Literal`, `Variable`
+  -  UTF-8 visual tree printing with `print_ast()`
 
 ⚠️ To see tree-style AST properly, use a UTF-8 compatible terminal like:
 - Windows Terminal
@@ -55,34 +64,27 @@ Focused on clarity, structure, and educational value.
 
 If your terminal shows `Γö£` or junk characters, it's a rendering issue, not a bug.
 
+---
 
-- **Evaluator / Interpreter**-
-- Walks the AST and executes statements
-- Supports:
-  - Arithmetic evaluation
-  - Variable declaration, assignment, and usage
-  - Print statement execution
+### Evaluator / Interpreter
+- Evaluates AST in a simple runtime
+- Tracks variable values with error checks
 - Detects runtime issues:
-  - Use of undefined variables
+  - undefined variables
   - Division by zero
 
-- **Input Support**
-   - Source: `.minic` files
-   - Output: Token stream with lexemes and token types
+---
 
-## Planned
+### Semantic Analysis
 
-- [ ] **Error Reporting**
-  - Improve syntax/runtime messages with line and column context
-  - Display source location in case of parse or runtime errors
+- Verifies:
+  - No use of undeclared variables
+  - Valid assignments and usage
+- Catches common runtime issues early
 
-- [ ] **Type System (optional)**  
-  Add support for basic types like `int`, `string`, and possibly type checking
+---
 
-- [ ] **Code Generation (optional)**  
-  Generate pseudo-assembly or VM bytecode for portability or optimization
-
-## Output Temp
+## Output
 ```text
  Raw input starts with: let x = 2 + 3 * (4 - 1);
  print(x);
@@ -126,6 +128,25 @@ If your terminal shows `Γö£` or junk characters, it's a rendering issue, not 
  11
 ```
 
+---
+
+## Planned  Work
+
+- [ ] **Improved Error Reporting**
+  - Improve syntax/runtime messages with line and column context
+  - Display source location in case of parse or runtime errors
+
+- [ ] **Type System (optional)**  
+  - Add support for basic types like `int`, `string`, and possibly type checking
+
+- [ ] **Code Generation (optional)**  
+  - Generate pseudo-assembly or VM bytecode for portability or optimization
+
+- [ ] **Control Flow**  
+  - Support if, while, block {}
+
+---
+
 ## Installation
 
 ```bash
@@ -133,3 +154,9 @@ git clone https://github.com/Gappyjosuke/minic-compiler.git
 cd minic-compiler
 make
 ./minic test/example.minic
+```
+---
+# License
+MIT – use for education, inspiration, or extension
+
+---
