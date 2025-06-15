@@ -3,8 +3,6 @@
 Lightweight compiler for a subset of the C language, written in C.  
 Focused on clarity, structure, and educational value.
 
----
-
 ## Project Overview
 
 - **Type**: Educational / Experimental Compiler
@@ -12,7 +10,6 @@ Focused on clarity, structure, and educational value.
 - **Architecture**: Single-pass, modular (Lexer → Parser → AST → Interpreter)
 - **Goal**: Understand compiler internals by building a minimal C-like interpreter from scratch
 
----
 
 ## Current Phase
 
@@ -25,7 +22,6 @@ Focused on clarity, structure, and educational value.
 - [ ] Type System (optional): Add support for `int`, `string`, and type checks  
 - [ ] Codegen (optional): Generate assembly or bytecode for executio
 
----
 
 ## Features
 
@@ -128,7 +124,6 @@ If your terminal shows `Γö£` or junk characters, it's a rendering issue, not 
  11
 ```
 
----
 
 ## Planned  Work
 
@@ -155,8 +150,5 @@ cd minic-compiler
 make
 ./minic test/example.minic
 ```
----
 # License
 MIT – use for education, inspiration, or extension
-
----
