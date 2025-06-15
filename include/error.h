@@ -1,0 +1,15 @@
+// error.h - Centralized error handling
+
+#ifndef ERROR_H
+#define ERROR_H
+
+// Report a syntax error and exit
+void syntax_error(const char* msg);
+
+// Report a runtime error and exit
+void runtime_error(const char* msg);
+
+// Like runtime_error, but with formatted input (like printf)
+void runtime_errorf(const char* fmt, ...);
+
+#endif // ERROR_H
