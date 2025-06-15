@@ -1,6 +1,7 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+extern int debug_lexer;
 
 typedef enum {
     TOKEN_INT,
