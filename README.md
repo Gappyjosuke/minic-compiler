@@ -3,12 +3,14 @@
 Lightweight compiler for a subset of the C language, written in C.  
 Focused on clarity, structure, and educational value.
 
+
 ## Project Overview
 
 - **Type**: Educational / Experimental Compiler
 - **Language**: C
 - **Architecture**: Single-pass, modular (Lexer → Parser → AST → Interpreter)
 - **Goal**: Understand compiler internals by building a minimal C-like interpreter from scratch
+
 
 
 ## Current Phase
@@ -21,6 +23,7 @@ Focused on clarity, structure, and educational value.
 - [ ] Error Handling: Add user-friendly syntax/runtime diagnostics  
 - [ ] Type System (optional): Add support for `int`, `string`, and type checks  
 - [ ] Codegen (optional): Generate assembly or bytecode for executio
+
 
 
 ## Features
