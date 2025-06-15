@@ -47,6 +47,15 @@ Focused on clarity, structure, and educational value.
     - Visual debug output via `print_ast()`    
   - Prints structured AST for debugging/visual verification:
 
+⚠️ To see tree-style AST properly, use a UTF-8 compatible terminal like:
+- Windows Terminal
+- VSCode integrated terminal
+- Git Bash (mintty)
+- Any Linux terminal (gnome-terminal, Konsole, etc.)
+
+If your terminal shows `Γö£` or junk characters, it's a rendering issue, not a bug.
+
+
 - **Evaluator / Interpreter**-
 - Walks the AST and executes statements
 - Supports:
@@ -101,15 +110,17 @@ Focused on clarity, structure, and educational value.
  [DEBUG] Created binary op node, type = 3, op = 4
  
  AST:
- AST: VarDecl x = ...
- BinaryOp(+)
-  Left: AST: Literal 2
-  Right: BinaryOp(*)
-  Left: AST: Literal 3
-  Right: BinaryOp(-)
-  Left: AST: Literal 4
-  Right: AST: Literal 1
-  AST: Print AST: Variable x
+ AST:
+ └── VarDecl x
+     └── BinaryOp(+)
+         ├── Literal 2
+         └── BinaryOp(*)
+             ├── Literal 3
+             └── BinaryOp(-)
+                 ├── Literal 4
+                 └── Literal 1
+ └── Print
+     └── Variable x
 
  Output:
  11
