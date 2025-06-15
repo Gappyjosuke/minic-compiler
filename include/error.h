@@ -1,13 +1,15 @@
 // error.h - Centralized error handling
-
 #ifndef ERROR_H
 #define ERROR_H
+
+#include "lexer.h"
+
 
 __attribute__((noreturn))
 void parser_error(const char* message);
 
 __attribute__((noreturn))
-void parser_errorf(const char* fmt, ...);
+void parser_errorf(Token token, const char* fmt, ...);
 
 // Report a syntax error and exit
 void syntax_error(const char* msg);
