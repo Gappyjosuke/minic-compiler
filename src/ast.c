@@ -79,49 +79,63 @@ ASTNode* create_variable_node(const char* name) {
     node->next = NULL;
     return node;
 }
+void print_ast_node(ASTNode* node, const char* prefix, int is_last);
 
 void print_ast(ASTNode* node) {
-    while (node) {
-        switch (node->type) {
-            case AST_VAR_DECL:
-                printf("AST: VarDecl %s = ...\n", node->var_decl.name);
-                print_ast(node->var_decl.value);
-                break;
-            case AST_ASSIGN:
-                printf("AST: Assign %s = ...\n", node->assign.name);
-                print_ast(node->assign.value);
-                break;
-            case AST_PRINT:
-                printf("AST: Print ");
-                print_ast(node->print.expression);
-                break;
-            case AST_BINARY_OP:
-                printf("BinaryOp(%s)\n",
-                 node->binary_op.op == TOKEN_PLUS ? "+" :
-                 node->binary_op.op == TOKEN_MINUS ? "-" :
-                 node->binary_op.op == TOKEN_STAR ? "*" :
-                 node->binary_op.op == TOKEN_SLASH ? "/" : "?");
-                printf("  Left: ");
-                print_ast(node->binary_op.left);
-                printf("  Right: ");
-                print_ast(node->binary_op.right);
-                break;
-            case AST_LITERAL:
-                printf("AST: Literal %d\n", node->literal.value);
-                break;
-            case AST_VARIABLE:
-                printf("AST: Variable %s\n", node->variable.name);
-                break;
-            case AST_UNARY_OP:
-                printf("UnaryOp(%s)\n", node->unary_op.op == TOKEN_MINUS ? "-" : "+");
-                print_ast(node->unary_op.operand);
-                break;
-            default:
-            printf("Unknown AST Node Type: %d (%s)\n", node->type, ast_type_to_str(node->type));
-            break;
+    printf("AST:\n");
+    for (; node; node = node->next) {
+        print_ast_node(node, "", node->next == NULL);
+    }
+}
 
+void print_ast_node(ASTNode* node, const char* prefix, int is_last) {
+    printf("%s%s", prefix, is_last ? "└── " : "├── ");
+
+    char next_prefix[256];
+    snprintf(next_prefix, sizeof(next_prefix), "%s%s", prefix, is_last ? "    " : "│   ");
+
+    switch (node->type) {
+        case AST_VAR_DECL:
+            printf("VarDecl %s\n", node->var_decl.name);
+            if (node->var_decl.value)
+                print_ast_node(node->var_decl.value, next_prefix, 1);
+            break;
+        case AST_ASSIGN:
+            printf("Assign %s\n", node->assign.name);
+            if (node->assign.value)
+                print_ast_node(node->assign.value, next_prefix, 1);
+            break;
+        case AST_PRINT:
+            printf("Print\n");
+            if (node->print.expression)
+                print_ast_node(node->print.expression, next_prefix, 1);
+            break;
+        case AST_BINARY_OP: {
+            const char* op =
+                node->binary_op.op == TOKEN_PLUS ? "+" :
+                node->binary_op.op == TOKEN_MINUS ? "-" :
+                node->binary_op.op == TOKEN_STAR ? "*" :
+                node->binary_op.op == TOKEN_SLASH ? "/" : "?";
+            printf("BinaryOp(%s)\n", op);
+            print_ast_node(node->binary_op.left, next_prefix, 0);
+            print_ast_node(node->binary_op.right, next_prefix, 1);
+            break;
         }
-        node = node->next;
+        case AST_UNARY_OP: {
+            const char* op = node->unary_op.op == TOKEN_MINUS ? "-" : "+";
+            printf("UnaryOp(%s)\n", op);
+            print_ast_node(node->unary_op.operand, next_prefix, 1);
+            break;
+        }
+        case AST_LITERAL:
+            printf("Literal %d\n", node->literal.value);
+            break;
+        case AST_VARIABLE:
+            printf("Variable %s\n", node->variable.name);
+            break;
+        default:
+            printf("Unknown AST node type %d\n", node->type);
+            break;
     }
 }
 
