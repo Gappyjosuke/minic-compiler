@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Iinclude -Wall
 
-SRC=src/main.c src/interpreter.c src/lexer.c src/parser.c src/codegen.c src/ast.c
+SRC=src/main.c src/interpreter.c src/lexer.c src/error.c src/parser.c src/codegen.c src/ast.c
 
 all:
 	$(CC) $(SRC) -o minic $(CFLAGS)
