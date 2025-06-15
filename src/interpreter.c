@@ -4,6 +4,7 @@
 #include "../include/interpreter.h"
 #include "../include/ast.h"
 #include "../include/lexer.h"
+#include "../include/error.h"
 
 
 typedef struct Variable {
@@ -24,6 +25,9 @@ void set_variable(const char* name, int value) {
         v = v->next;
     }
     Variable* new_var = malloc(sizeof(Variable));
+    if (!new_var) {
+        runtime_error("Out of memory when allocating new variable");
+    }
     strcpy(new_var->name, name);
     new_var->value = value;
     new_var->next = symbol_table;
@@ -37,22 +41,14 @@ int get_variable(const char* name) {
             return v->value;
         v = v->next;
     }
-    fprintf(stderr, "Runtime Error: Undefined variable '%s'\n", name);
-    exit(1);
+    runtime_errorf("Undefined variable '%s'", name);
+    return 0;
 }
+
 int eval_expr(ASTNode* expr) {
     if (!expr) {
-        fprintf(stderr, "eval_expr called with NULL!\n");
-        exit(1);
-    }
-    
-    if (expr == NULL) {
-     fprintf(stderr, "Runtime Error: NULL expression node\n");
-     exit(1);
-    }
-
-
-
+        runtime_error("eval_expr called with NULL expression node");   
+        }
     switch (expr->type) {
         case AST_LITERAL:
             return expr->literal.value;
@@ -75,22 +71,19 @@ int eval_expr(ASTNode* expr) {
                 case TOKEN_STAR: return left * right;
                 case TOKEN_SLASH:
                     if (right == 0) {
-                        fprintf(stderr, "Division by zero\n");
-                        exit(1);
+                        runtime_error("Division by zero");
                     }
                     return left / right;
                 default:
-                    fprintf(stderr, "Unsupported binary operator: %d\n", expr->binary_op.op);
-                    exit(1);
+                    runtime_errorf("Unsupported binary operator: %d", expr->binary_op.op);
             }
         }
 
         default:
-            fprintf(stderr, "Unknown expression type: %d (%s) (maybe uninitialized or parser bug)\n",
-                expr->type, ast_type_to_str(expr->type));
-            fprintf(stderr, "[DEBUG] Raw node pointer: %p\n", (void*)expr);
-            exit(1);
+        runtime_errorf("Unknown expression type: %d (%s)", expr->type, ast_type_to_str(expr->type));
+
     }
+    return 0;
 }
 
 
@@ -108,8 +101,7 @@ void interpret(ASTNode* node) {
                 printf("%d\n", eval_expr(node->print.expression));
                 break;
             default:
-                fprintf(stderr, "Unknown statement type\n");
-                exit(1);
+                runtime_errorf("Unknown statement type: %d (%s)", node->type, ast_type_to_str(node->type));
         }
         node = node->next;
     }
