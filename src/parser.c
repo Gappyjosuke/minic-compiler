@@ -4,6 +4,7 @@
 #include <string.h>
 #include "parser.h"
 #include "ast.h"
+#include "error.h"
 
 static TokenNode* current;
 
@@ -56,22 +57,19 @@ ASTNode* parse_program(TokenNode* tokens) {
 ASTNode* parse_statement() {
     if (match(TOKEN_INT) || match(TOKEN_LET)) {
         if (!current || current->token.type != TOKEN_IDENTIFIER) {
-            fprintf(stderr, "Syntax Error: Expected identifier after 'let'\n");
-            exit(1);
+            parser_error("Expected identifier after 'let'");
         }
             char* name = strdup(current->token.lexeme);
             advance();
 
             if (!match(TOKEN_ASSIGN)) {
-                fprintf(stderr, "Syntax Error: Expected '=' after identifier\n");
-                exit(1);
+                parser_error("Expected '=' after identifier");
             }
 
             ASTNode* value = parse_expression();
 
             if (!match(TOKEN_SEMICOLON)) {
-                fprintf(stderr, "Syntax Error: Expected ';'\n");
-                exit(1);
+                parser_error("Expected ';'");
             }
 
             return create_var_decl_node(name, value);
@@ -84,15 +82,13 @@ ASTNode* parse_statement() {
         advance();
 
         if (!match(TOKEN_ASSIGN)) {
-            fprintf(stderr, "Syntax Error: Expected '=' after identifier '%s'\n", name);
-            exit(1);
+            parser_errorf("Expected '=' after identifier '%s'", name);
         }
 
         ASTNode* value = parse_expression();
 
         if (!match(TOKEN_SEMICOLON)) {
-            fprintf(stderr, "Syntax Error: Expected ';'\n");
-            exit(1);
+            parser_error("Expected ';'");
         }
 
         return create_assign_node(name, value);
@@ -100,28 +96,28 @@ ASTNode* parse_statement() {
 
     if (match(TOKEN_PRINT)) {
         if (!match(TOKEN_LPAREN)) {
-            fprintf(stderr, "Syntax Error: Expected '('\n");
-            exit(1);
+            parser_error("Expected '('");
         }
 
         ASTNode* expr = parse_expression();
 
         if (!match(TOKEN_RPAREN)) {
-            fprintf(stderr, "Syntax Error: Expected ')'\n");
-            exit(1);
+            parser_error("Expected ')'");
+
         }
 
         if (!match(TOKEN_SEMICOLON)) {
-            fprintf(stderr, "Syntax Error: Expected ';'\n");
-            exit(1);
+            parser_error("Expected ';'");
+
         }
 
         return create_print_node(expr);
     }
 
-    fprintf(stderr, "Syntax Error: Unknown statement at token '%s'\n", current->token.lexeme);
-    exit(1);
+    parser_errorf("Unknown statement at token '%s'", current->token.lexeme);
+
 }
+
 
 
 static ASTNode* parse_expression() {
