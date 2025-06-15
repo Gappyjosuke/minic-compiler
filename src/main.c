@@ -36,9 +36,8 @@ int main(int argc, char* argv[]) {
     printf("\nAST:\n");
     print_ast(ast);
     
-    ASTNode* root = parse_program(tokens);
-    perform_semantic_analysis(root);
-    interpret(root);
+    perform_semantic_analysis(ast);
+    
 
     // Interpret the program
     printf("\nOutput:\n");
