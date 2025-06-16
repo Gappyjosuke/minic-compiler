@@ -11,40 +11,39 @@
 
 static TokenNode* current;
 
-__attribute__((unused))
-static void parser_error_at(Token token, const char* message) {
-    fprintf(stderr, "Syntax Error: %s at line %d, column %d (got '%s')\n",
-            message, token.line, token.column, token.lexeme);
-    exit(EXIT_FAILURE);
-}
 
-
-
-
-// ---- Expression Parsing with Precedence ----
 
 static ASTNode* parse_expression(); // entry
-static ASTNode* parse_term();       // + -
+static ASTNode* parse_equality();   // ==, !=
+static ASTNode* parse_relational(); // <, >, <=, >=
+static ASTNode* parse_addition();   // +, -
+static ASTNode* parse_term();       // *, /
 static ASTNode* parse_unary();      // -x
-static ASTNode* parse_primary();    // numbers, variables, (expr)
-// Forward declarations
-static ASTNode* parse_statement();
-static ASTNode* parse_factor();
+static ASTNode* parse_primary();    // literals, identifiers, ()
+static ASTNode* parse_statement();  // statement parser
+static ASTNode* parse_factor();     // wraps parse_unary
+
 
 // Advance to next token
 static void advance() {
-    if (current != NULL)
-        current = current->next;
+    if (current == NULL || current->next == NULL) {
+        current = NULL;  // Set to NULL instead of error
+        return;
+    }
+    if (!current) return;
+    current = current->next;
 }
 
-// Match current token type
-static int match(TokenType type) {
-    if (current != NULL && current->token.type == type) {
+
+bool match(TokenType type) {
+    if (!current) return false;
+    if (current->token.type == type) {
         advance();
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
+
 
 
 // Entry point
@@ -55,6 +54,7 @@ ASTNode* parse_program(TokenNode* tokens) {
 
     while (current != NULL && current->token.type != TOKEN_EOF) {
         ASTNode* stmt = parse_statement();
+        if (stmt == NULL) break;  // Stop if statement parsing fails
 
         if (head == NULL) {
             head = tail = stmt;
@@ -62,89 +62,69 @@ ASTNode* parse_program(TokenNode* tokens) {
             tail->next = stmt;
             tail = stmt;
         }
+        
+        // Add explicit check after each statement
+        if (current == NULL || current->token.type == TOKEN_EOF) {
+            break;
+        }
     }
     return head;
 }
 
-// statement → declaration | print_statement | assignment
-ASTNode* parse_statement() {
-    if (match(TOKEN_INT) || match(TOKEN_LET)) {
-        if (!current || current->token.type != TOKEN_IDENTIFIER) {
-            parser_errorf(current->token, "Expected identifier after 'let'", token_type_to_string(current->token.type));
-        }
-        char* name = strdup(current->token.lexeme);
-        advance();
-
-        if (!match(TOKEN_ASSIGN)) {
-            parser_errorf(current->token, "Expected '=' after identifier", token_type_to_string(current->token.type));
-        }
-
-        ASTNode* value = parse_expression();
-
-        if (!match(TOKEN_SEMICOLON)) {
-            parser_errorf(current->token, "Expected ';' after declaration, but got '%s'", token_type_to_string(current->token.type));
-        }
-
-        return create_var_decl_node(name, value);
-        
-    }
-    
-
-    if (current->token.type == TOKEN_IDENTIFIER) {
-        char* name = strdup(current->token.lexeme);
-        advance();
-
-        if (!match(TOKEN_ASSIGN)) {
-            parser_errorf(current->token, "Expected '=' after identifier, but got '%s'", name);
-        }
-
-        ASTNode* value = parse_expression();
-
-        if (!match(TOKEN_SEMICOLON)) {
-            parser_errorf(current->token, "Expected ';' after assignment, but got '%s'", token_type_to_string(current->token.type));
-        }
-
-        return create_assign_node(name, value);
-    }
-
-    if (match(TOKEN_PRINT)) {
-        if (!match(TOKEN_LPAREN)) {
-            parser_errorf(current->token, "Expected '(' after 'print', but got '%s'", token_type_to_string(current->token.type));
-        }
-
-        ASTNode* expr = parse_expression();
-
-        if (!match(TOKEN_RPAREN)) {
-            parser_errorf(current->token, "Expected ')' after print expression, but got '%s'", token_type_to_string(current->token.type));
-
-        }
-
-        if (!match(TOKEN_SEMICOLON)) {
-            parser_errorf(current->token, "Expected ';' after print statement, but got '%s'", token_type_to_string(current->token.type));
-
-        }
-
-        return create_print_node(expr);
-    }
-
-    parser_errorf(current->token, "Unknown statement at token '%s'", current->token.lexeme);
-    return NULL;
-}
+// statement → declaration 
 
 // ---- Expression parsing ----
 
-
 static ASTNode* parse_expression() {
-    ASTNode* left = parse_term();
-    while (current->token.type == TOKEN_PLUS || current->token.type == TOKEN_MINUS) {
+    return parse_equality();
+}
+
+static ASTNode* parse_equality() {
+    ASTNode* node = parse_relational();
+
+    while (current->token.type == TOKEN_EQ || current->token.type == TOKEN_NEQ) {
         TokenType op = current->token.type;
-        advance();
-        ASTNode* right = parse_term();
-        left = create_binary_op_node(op,left,right);
+        advance();  // consume == or !=
+
+        ASTNode* right = parse_relational();
+
+        // Replace with:
+        
+        node = create_binary_op_node(op, node, right);
+        
+    }
+
+    return node;
+}
+
+
+static ASTNode* parse_relational() {
+    ASTNode* left = parse_addition();
+
+    while (current->token.type == TOKEN_LT || current->token.type == TOKEN_LE ||
+           current->token.type == TOKEN_GT || current->token.type == TOKEN_GE) {
+        TokenType op = current->token.type;
+        advance();  // consume <, <=, >, >=
+
+        ASTNode* right = parse_addition();
+
+        left = create_binary_op_node(op, left, right);
     }
 
     return left;
 }
+ 
+static ASTNode* parse_addition() {
+    ASTNode* left = parse_term();
+    while (current->token.type == TOKEN_PLUS || current->token.type == TOKEN_MINUS) {
+        TokenType op = current->token.type;
+        advance(); // consume + or -
+        ASTNode* right = parse_term();
+        left = create_binary_op_node(op, left, right);
+    }
+    return left;
+}
+
 
 
 static ASTNode* parse_term() {
@@ -156,10 +136,6 @@ static ASTNode* parse_term() {
         left = create_binary_op_node(op, left, right);
     }
     return left;
-}
-
-static ASTNode* parse_factor() {
-    return parse_unary();  // Might be unary or primary (like a number or (expr))
 }
 
 
@@ -176,6 +152,10 @@ static ASTNode* parse_unary() {
 
 // parse_primary → numbers, identifiers, (expr)
 static ASTNode* parse_primary() {
+    if(current == NULL){
+        parser_error("unexpected end of input in primary expression");
+    }
+    
     if (!current) {
         fprintf(stderr, "Unexpected end of input\n");
         exit(1);
@@ -203,3 +183,90 @@ static ASTNode* parse_primary() {
     return NULL;
 }
 
+ASTNode* parse_statement() {
+    if (current == NULL || current->token.type == TOKEN_EOF) {
+        return NULL;  // Gracefully handle EOF
+    }
+    if (current->token.type == TOKEN_INT || current->token.type == TOKEN_LET) {
+        advance();
+        if (!current || current->token.type != TOKEN_IDENTIFIER) {
+            parser_errorf(current->token, "Expected identifier after 'let'", token_type_to_string(current->token.type));
+            return NULL;
+        }
+        char* name = strdup(current->token.lexeme);
+        advance();
+
+        if (!match(TOKEN_ASSIGN)) {
+            parser_error_free_str(current->token, name, "Expected '=' after identifier");
+            return NULL;  
+        }
+
+        ASTNode* value = parse_expression();
+
+        if (!match(TOKEN_SEMICOLON)) {
+            free(name);
+            parser_errorf(current->token, "Expected ';' after declaration, but got '%s'", token_type_to_string(current->token.type));
+            return NULL;
+        }
+
+        return create_var_decl_node(name, value);
+        
+    }
+    
+
+    if (current->token.type == TOKEN_IDENTIFIER) {
+        char* name = strdup(current->token.lexeme);
+        advance();
+
+        if (!match(TOKEN_ASSIGN)) {
+            parser_error_free_str(current->token, name, "Expected '=' after identifier");
+            return NULL;
+        }
+        advance();
+
+        ASTNode* value = parse_expression();
+
+        if (!match(TOKEN_SEMICOLON)) {
+            free(name);
+            parser_errorf(current->token, "Expected ';' after assignment, but got '%s'", token_type_to_string(current->token.type));
+            return NULL;
+        }
+
+        return create_assign_node(name, value);
+    }
+
+    if (match(TOKEN_PRINT)) {
+        if (!match(TOKEN_LPAREN)) {
+            parser_errorf(current->token, "Expected '(' after 'print', but got '%s'", token_type_to_string(current->token.type));
+        }
+
+        if (current == NULL){
+            parser_error("Unexpected EOF after print");
+        }
+
+        ASTNode* expr = parse_expression();
+
+        if (!match(TOKEN_RPAREN)) {
+            parser_errorf(current->token, "Expected ')' after print expression, but got '%s'", token_type_to_string(current->token.type));
+
+        }
+        
+
+        if (!match(TOKEN_SEMICOLON)) {
+            parser_errorf(current->token, "Expected ';' after print statement, but got '%s'", token_type_to_string(current->token.type));
+
+        }
+        
+
+        return create_print_node(expr);
+    }
+
+    parser_errorf(current->token, "Unknown statement at token '%s'", current->token.lexeme);
+    return NULL;
+}
+
+
+
+static ASTNode* parse_factor() {
+    return parse_unary();  // Might be unary or primary (like a number or (expr))
+}
