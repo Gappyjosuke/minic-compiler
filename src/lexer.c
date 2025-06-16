@@ -10,21 +10,27 @@ int debug_lexer = 0;
 
 const char* token_type_to_string(TokenType type) {
     switch (type) {
+        case TOKEN_INT: return "int";
+        case TOKEN_IDENTIFIER: return "identifier";
+        case TOKEN_ASSIGN: return "=";
+        case TOKEN_NUMBER: return "number";
         case TOKEN_PLUS: return "+";
         case TOKEN_MINUS: return "-";
         case TOKEN_STAR: return "*";
-        case TOKEN_SLASH: return "/";
-        case TOKEN_ASSIGN: return "=";
-        case TOKEN_EOF: return "EOF";
-        case TOKEN_IDENTIFIER: return "identifier";
-        case TOKEN_INT: return "int";
-        case TOKEN_LET: return "let";
-        case TOKEN_LPAREN: return "(";
-        case TOKEN_NUMBER: return "number";
         case TOKEN_PRINT: return "print";
+        case TOKEN_LPAREN: return "(";
         case TOKEN_RPAREN: return ")";
         case TOKEN_SEMICOLON: return ";";
-        default: return "unknown";
+        case TOKEN_LET: return "let";
+        case TOKEN_SLASH: return "/";
+        case TOKEN_LT: return "<";
+        case TOKEN_LE: return "<=";
+        case TOKEN_GT: return ">";
+        case TOKEN_GE: return ">=";
+        case TOKEN_EQ: return "==";
+        case TOKEN_NEQ: return "!=";
+        case TOKEN_EOF: return "EOF";
+        default: return "UNKNOWN";
     }
 }
 
@@ -54,7 +60,6 @@ TokenNode* tokenize(const char* input) {
     }
 
     while (*p) {
-        
         while (isspace(*p)) {
             if (*p == '\n') {
                 line++;
@@ -122,6 +127,9 @@ TokenNode* tokenize(const char* input) {
             token.type = TOKEN_NUMBER;
             strcpy(token.lexeme, num);
             token.value = atoi(num);
+            
+            tail = add_token(tail, token);
+            continue;
         } 
         //Identifiers and Keywords
         else if (isalpha(*p)) {
@@ -138,9 +146,42 @@ TokenNode* tokenize(const char* input) {
             else if (strcmp(id, "let") == 0) token.type = TOKEN_LET;
             else token.type = TOKEN_IDENTIFIER;
             strcpy(token.lexeme, id);
+
+            tail = add_token(tail, token);
+            continue;
         } 
         //Symbol and operators
-        else {
+        if (*p == '=' && *(p + 1) == '=') {
+            token.type = TOKEN_EQ;
+            strcpy(token.lexeme, "==");
+            p += 2;
+            column += 2;
+        } else if (*p == '!' && *(p + 1) == '=') {
+            token.type = TOKEN_NEQ;
+            strcpy(token.lexeme, "!=");
+            p += 2;
+            column += 2;
+        } else if (*p == '<' && *(p + 1) == '=') {
+            token.type = TOKEN_LE;
+            strcpy(token.lexeme, "<=");
+            p += 2;
+            column += 2;
+        } else if (*p == '>' && *(p + 1) == '=') {
+            token.type = TOKEN_GE;
+            strcpy(token.lexeme, ">=");
+            p += 2;
+            column += 2;
+        } else if (*p == '<') {
+            token.type = TOKEN_LT;
+            strcpy(token.lexeme, "<");
+            p++;
+            column++;
+        } else if (*p == '>') {
+            token.type = TOKEN_GT;
+            strcpy(token.lexeme, ">");
+            p++;
+            column++;
+        } else {
             switch (*p) {
                 case '=':
                     token.type = TOKEN_ASSIGN;
