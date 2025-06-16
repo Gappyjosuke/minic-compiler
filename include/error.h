@@ -20,4 +20,7 @@ void runtime_error(const char* msg);
 // Like runtime_error, but with formatted input (like printf)
 void runtime_errorf(const char* fmt, ...);
 
+void parser_error_free_str(Token token, char* str_to_free, const char* fmt, ...);
+
+void parser_error_at(Token token, const char* message);
 #endif // ERROR_H
