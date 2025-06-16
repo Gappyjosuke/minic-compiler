@@ -4,6 +4,14 @@
 #include <stdarg.h>
 #include "../include/error.h"
 
+
+void parser_error_at(Token token, const char* message) {
+    fprintf(stderr, "Syntax Error: %s at line %d, column %d (got '%s')\n",
+            message, token.line, token.column, token.lexeme);
+    exit(EXIT_FAILURE);
+}
+
+
 void syntax_error(const char* msg) {
     fprintf(stderr, "[Syntax Error] %s\n", msg);
     exit(1);
@@ -40,4 +48,18 @@ void parser_errorf(Token token, const char* fmt, ...) {
     
     fprintf(stderr, "\n");
     exit(1);
+}
+
+
+
+void parser_error_free_str(Token token, char* str_to_free, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    
+    char buffer[256];
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    va_end(args);
+    
+    if (str_to_free) free(str_to_free);
+    parser_error_at(token, buffer);
 }
