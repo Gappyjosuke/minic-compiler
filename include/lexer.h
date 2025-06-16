@@ -4,19 +4,32 @@
 extern int debug_lexer;
 
 typedef enum {
-    TOKEN_INT,
+    // Basic tokens (0-10)
+    TOKEN_INT = 0,
     TOKEN_IDENTIFIER,
-    TOKEN_ASSIGN,
+    TOKEN_ASSIGN,       // =
     TOKEN_NUMBER,
-    TOKEN_PLUS,
-    TOKEN_MINUS,
-    TOKEN_STAR,
+    TOKEN_PLUS,         // +
+    TOKEN_MINUS,        // -
+    TOKEN_STAR,         // *
     TOKEN_PRINT,
-    TOKEN_LPAREN,
-    TOKEN_RPAREN,
-    TOKEN_SEMICOLON,
+    TOKEN_LPAREN,       // (
+    TOKEN_RPAREN,       // )
+    TOKEN_SEMICOLON,    // ;
+    
+    // Keywords (11-15)
     TOKEN_LET,
-    TOKEN_SLASH,
+    
+    // Operators (16-25)
+    TOKEN_SLASH = 16,   // /
+    TOKEN_LT,           // <
+    TOKEN_LE,           // <=
+    TOKEN_GT,           // >
+    TOKEN_GE,           // >=
+    TOKEN_EQ = 21,           // ==
+    TOKEN_NEQ =22,          // !=
+
+    // End marker
     TOKEN_EOF
 } TokenType;
 
