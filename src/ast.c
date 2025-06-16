@@ -19,10 +19,12 @@ const char* ast_type_to_str(ASTNodeType type) {
 
 ASTNode* create_var_decl_node(const char* name, ASTNode* value) {
     ASTNode* node = malloc(sizeof(ASTNode));
+    if (!node) return NULL;
     node->type = AST_VAR_DECL;
     node->var_decl.name = strdup(name);
     node->var_decl.value = value;
     node->next = NULL;
+    printf("Created var decl node for %s\n", name);
     return node;
 }
 
@@ -49,13 +51,12 @@ ASTNode* create_binary_op_node(TokenType op, ASTNode* left, ASTNode* right) {
     node->binary_op.op = op;
     node->binary_op.left = left;
     node->binary_op.right = right;
-    node->next = NULL;
     
     // Debug: Only if debug mode is enabled
-#ifdef DEBUG_PARSER
+ #ifdef DEBUG_PARSER
     printf("[DEBUG][PARSER] Created binary op node, op = %d\n", op);
- 
-#endif
+ #endif
+    node->next = NULL;
     return node;
 }
 
@@ -115,6 +116,7 @@ void print_ast_node(ASTNode* node, const char* prefix, int is_last) {
             if (node->print.expression)
                 print_ast_node(node->print.expression, next_prefix, 1);
             break;
+
         case AST_BINARY_OP: {
             const char* op =
                 node->binary_op.op == TOKEN_PLUS ? "+" :
