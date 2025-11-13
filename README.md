@@ -1,19 +1,37 @@
-# MiniC Compiler
+# MiniC Compiler & Compiler Design Laboratory Suite
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Experiments](https://img.shields.io/badge/experiments-7-blue)]()
+[![University](https://img.shields.io/badge/Anna-University-orange)]()
 
-A lightweight compiler for a C-like subset language, implemented in C. Designed for educational purposes with clean, modular architecture.
+A comprehensive compiler development project featuring both a basic Mini-C compiler and all 7 compiler design laboratory experiments as per Anna University curriculum.
 
 
 ## Project Overview
 
-- **Type**: Educational / Experimental Compiler
-- **Language**: C
-- **Architecture**: Single-pass, modular (Lexer → Parser → AST → Interpreter)
-- **Goal**: Understand compiler internals by building a minimal C-like interpreter from scratch
+- **Type**: Educational Compiler Suite + Laboratory Experiments
+- **Language**: C, WIN_FLEX, WIN_BIOSN, Assembly
+- **Architecture**: Multi-phase compiler construction
+- **Goal**: Complete understanding of compiler internals through practical implementation
 
+##  Compiler Design Laboratory (Complete Suite)
 
+| Experiment | Title | Technologies | Status |
+|------------|-------|--------------|--------|
+| 1 | Lexical Analyzer for C Patterns | LEX, C | ✅ Complete |
+| 2 | LEX Tool Implementation | LEX, C | ✅ Complete |
+| 3 | YACC Specifications | YACC, LEX, C | ✅ Complete |
+| 4 | Three Address Code Generation | LEX, YACC, C | ✅ Complete |
+| 5 | Type Checking System | LEX, YACC, C | ✅ Complete |
+| 6 | Code Optimization Techniques | LEX, YACC, C | ✅ Complete |
+| 7 | 8086 Assembly Backend | LEX, YACC, Assembly | ✅ Complete |
+
+**Location**: All experiments are in `/experiments/` folder
+
+---
+
+## 🏗️ MiniC Compiler (Original Project)
 
 ## Current Phase
 
@@ -215,7 +233,7 @@ Interpretation completed successfully.
 
 ---
 
-## Installation
+## working
 
 ```bash
 git clone https://github.com/Gappyjosuke/minic-compiler.git
@@ -223,5 +241,39 @@ cd minic-compiler
 make
 ./minic test/error.minic
 ```
+---
+
+## For Laboratory Experiments:
+
+```bash
+git clone https://github.com/Gappyjosuke/minic-compiler.git
+cd experiments/1-lexical-analyzer
+run the appropitae .exe's for each experiments
+```
+
+## Project Structure
+```text
+minic-compiler/
+├── src/                    # Original MiniC compiler source
+├── experiments/            # All 7 laboratory experiments
+│   ├── 1-lexical-analyzer/
+│   ├── 2-lex-tool-implementation/
+│   ├── 3-yacc-specifications/
+│   ├── 4-three-address-code/
+│   ├── 5-type-checking/
+│   ├── 6-code-optimization/
+│   └── 7-backend-8086/
+├── docs/                   # Documentation
+├── test/                   # Test cases
+└── README.md
+```
+## Project Evolution
+    
+    2023: Basic MiniC Compiler foundation
+
+    2024: Complete 7-experiment compiler laboratory suite
+
+    Future: Enhanced MiniC features + experiment extensions
+
 # License
 MIT License - See LICENSE for details.
