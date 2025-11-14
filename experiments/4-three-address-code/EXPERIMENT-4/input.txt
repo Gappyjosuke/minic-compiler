@@ -1,0 +1,2 @@
+x = a + b * c;
+if (x < 10) y = x + 1; else y = x - 1;

@@ -1,0 +1,541 @@
+State 32 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: %empty
+    2        | program stmt
+
+    3 stmt: ID ASSIGN expr SEMI
+    4     | IF LPAREN condition RPAREN stmt
+    5     | IF LPAREN condition RPAREN stmt ELSE stmt
+
+    6 condition: expr LT expr
+    7          | expr GT expr
+    8          | expr LE expr
+    9          | expr GE expr
+   10          | expr EQ expr
+   11          | expr NE expr
+
+   12 expr: expr PLUS expr
+   13     | expr MINUS expr
+   14     | expr MUL expr
+   15     | expr DIV expr
+   16     | LPAREN expr RPAREN
+   17     | ID
+   18     | NUM
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    ID <str> (258) 3 17
+    NUM <str> (259) 18
+    IF (260) 4 5
+    ELSE (261) 5
+    ASSIGN (262) 3
+    PLUS (263) 12
+    MINUS (264) 13
+    MUL (265) 14
+    DIV (266) 15
+    EQ (267) 10
+    NE (268) 11
+    LT (269) 6
+    GT (270) 7
+    LE (271) 8
+    GE (272) 9
+    LPAREN (273) 4 5 16
+    RPAREN (274) 4 5 16
+    SEMI (275) 3
+
+
+Nonterminals, with rules where they appear
+
+    $accept (21)
+        on left: 0
+    program (22)
+        on left: 1 2
+        on right: 0 2
+    stmt <str> (23)
+        on left: 3 4 5
+        on right: 2 4 5
+    condition <str> (24)
+        on left: 6 7 8 9 10 11
+        on right: 4 5
+    expr <str> (25)
+        on left: 12 13 14 15 16 17 18
+        on right: 3 6 7 8 9 10 11 12 13 14 15 16
+
+
+State 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 1 (program)
+
+    program  go to state 1
+
+
+State 1
+
+    0 $accept: program . $end
+    2 program: program . stmt
+
+    $end  shift, and go to state 2
+    ID    shift, and go to state 3
+    IF    shift, and go to state 4
+
+    stmt  go to state 5
+
+
+State 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 3
+
+    3 stmt: ID . ASSIGN expr SEMI
+
+    ASSIGN  shift, and go to state 6
+
+
+State 4
+
+    4 stmt: IF . LPAREN condition RPAREN stmt
+    5     | IF . LPAREN condition RPAREN stmt ELSE stmt
+
+    LPAREN  shift, and go to state 7
+
+
+State 5
+
+    2 program: program stmt .
+
+    $default  reduce using rule 2 (program)
+
+
+State 6
+
+    3 stmt: ID ASSIGN . expr SEMI
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 11
+
+
+State 7
+
+    4 stmt: IF LPAREN . condition RPAREN stmt
+    5     | IF LPAREN . condition RPAREN stmt ELSE stmt
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    condition  go to state 12
+    expr       go to state 13
+
+
+State 8
+
+   17 expr: ID .
+
+    $default  reduce using rule 17 (expr)
+
+
+State 9
+
+   18 expr: NUM .
+
+    $default  reduce using rule 18 (expr)
+
+
+State 10
+
+   16 expr: LPAREN . expr RPAREN
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 14
+
+
+State 11
+
+    3 stmt: ID ASSIGN expr . SEMI
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    PLUS   shift, and go to state 15
+    MINUS  shift, and go to state 16
+    MUL    shift, and go to state 17
+    DIV    shift, and go to state 18
+    SEMI   shift, and go to state 19
+
+
+State 12
+
+    4 stmt: IF LPAREN condition . RPAREN stmt
+    5     | IF LPAREN condition . RPAREN stmt ELSE stmt
+
+    RPAREN  shift, and go to state 20
+
+
+State 13
+
+    6 condition: expr . LT expr
+    7          | expr . GT expr
+    8          | expr . LE expr
+    9          | expr . GE expr
+   10          | expr . EQ expr
+   11          | expr . NE expr
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    PLUS   shift, and go to state 15
+    MINUS  shift, and go to state 16
+    MUL    shift, and go to state 17
+    DIV    shift, and go to state 18
+    EQ     shift, and go to state 21
+    NE     shift, and go to state 22
+    LT     shift, and go to state 23
+    GT     shift, and go to state 24
+    LE     shift, and go to state 25
+    GE     shift, and go to state 26
+
+
+State 14
+
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+   16     | LPAREN expr . RPAREN
+
+    PLUS    shift, and go to state 15
+    MINUS   shift, and go to state 16
+    MUL     shift, and go to state 17
+    DIV     shift, and go to state 18
+    RPAREN  shift, and go to state 27
+
+
+State 15
+
+   12 expr: expr PLUS . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 28
+
+
+State 16
+
+   13 expr: expr MINUS . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 29
+
+
+State 17
+
+   14 expr: expr MUL . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 30
+
+
+State 18
+
+   15 expr: expr DIV . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 31
+
+
+State 19
+
+    3 stmt: ID ASSIGN expr SEMI .
+
+    $default  reduce using rule 3 (stmt)
+
+
+State 20
+
+    4 stmt: IF LPAREN condition RPAREN . stmt
+    5     | IF LPAREN condition RPAREN . stmt ELSE stmt
+
+    ID  shift, and go to state 3
+    IF  shift, and go to state 4
+
+    stmt  go to state 32
+
+
+State 21
+
+   10 condition: expr EQ . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 33
+
+
+State 22
+
+   11 condition: expr NE . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 34
+
+
+State 23
+
+    6 condition: expr LT . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 35
+
+
+State 24
+
+    7 condition: expr GT . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 36
+
+
+State 25
+
+    8 condition: expr LE . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 37
+
+
+State 26
+
+    9 condition: expr GE . expr
+
+    ID      shift, and go to state 8
+    NUM     shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+    expr  go to state 38
+
+
+State 27
+
+   16 expr: LPAREN expr RPAREN .
+
+    $default  reduce using rule 16 (expr)
+
+
+State 28
+
+   12 expr: expr . PLUS expr
+   12     | expr PLUS expr .
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    MUL  shift, and go to state 17
+    DIV  shift, and go to state 18
+
+    $default  reduce using rule 12 (expr)
+
+
+State 29
+
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   13     | expr MINUS expr .
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    MUL  shift, and go to state 17
+    DIV  shift, and go to state 18
+
+    $default  reduce using rule 13 (expr)
+
+
+State 30
+
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   14     | expr MUL expr .
+   15     | expr . DIV expr
+
+    $default  reduce using rule 14 (expr)
+
+
+State 31
+
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+   15     | expr DIV expr .
+
+    $default  reduce using rule 15 (expr)
+
+
+State 32
+
+    4 stmt: IF LPAREN condition RPAREN stmt .
+    5     | IF LPAREN condition RPAREN stmt . ELSE stmt
+
+    ELSE  shift, and go to state 39
+
+    ELSE      [reduce using rule 4 (stmt)]
+    $default  reduce using rule 4 (stmt)
+
+
+State 33
+
+   10 condition: expr EQ expr .
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    PLUS   shift, and go to state 15
+    MINUS  shift, and go to state 16
+    MUL    shift, and go to state 17
+    DIV    shift, and go to state 18
+
+    $default  reduce using rule 10 (condition)
+
+
+State 34
+
+   11 condition: expr NE expr .
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    PLUS   shift, and go to state 15
+    MINUS  shift, and go to state 16
+    MUL    shift, and go to state 17
+    DIV    shift, and go to state 18
+
+    $default  reduce using rule 11 (condition)
+
+
+State 35
+
+    6 condition: expr LT expr .
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    PLUS   shift, and go to state 15
+    MINUS  shift, and go to state 16
+    MUL    shift, and go to state 17
+    DIV    shift, and go to state 18
+
+    $default  reduce using rule 6 (condition)
+
+
+State 36
+
+    7 condition: expr GT expr .
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    PLUS   shift, and go to state 15
+    MINUS  shift, and go to state 16
+    MUL    shift, and go to state 17
+    DIV    shift, and go to state 18
+
+    $default  reduce using rule 7 (condition)
+
+
+State 37
+
+    8 condition: expr LE expr .
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    PLUS   shift, and go to state 15
+    MINUS  shift, and go to state 16
+    MUL    shift, and go to state 17
+    DIV    shift, and go to state 18
+
+    $default  reduce using rule 8 (condition)
+
+
+State 38
+
+    9 condition: expr GE expr .
+   12 expr: expr . PLUS expr
+   13     | expr . MINUS expr
+   14     | expr . MUL expr
+   15     | expr . DIV expr
+
+    PLUS   shift, and go to state 15
+    MINUS  shift, and go to state 16
+    MUL    shift, and go to state 17
+    DIV    shift, and go to state 18
+
+    $default  reduce using rule 9 (condition)
+
+
+State 39
+
+    5 stmt: IF LPAREN condition RPAREN stmt ELSE . stmt
+
+    ID  shift, and go to state 3
+    IF  shift, and go to state 4
+
+    stmt  go to state 40
+
+
+State 40
+
+    5 stmt: IF LPAREN condition RPAREN stmt ELSE stmt .
+
+    $default  reduce using rule 5 (stmt)
