@@ -1,0 +1,212 @@
+State 18 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program stmt
+    2        | stmt
+
+    3 stmt: type ID SEMI
+    4     | ID ASSIGN expr SEMI
+
+    5 type: INT
+    6     | FLOAT
+
+    7 expr: expr OP expr
+    8     | ID
+    9     | INT_NUM
+   10     | FLOAT_NUM
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    ID <str> (258) 3 4 8
+    INT <str> (259) 5
+    FLOAT <str> (260) 6
+    INT_NUM <ival> (261) 9
+    FLOAT_NUM <fval> (262) 10
+    ASSIGN (263) 4
+    SEMI (264) 3 4
+    OP (265) 7
+
+
+Nonterminals, with rules where they appear
+
+    $accept (11)
+        on left: 0
+    program (12)
+        on left: 1 2
+        on right: 0 1
+    stmt (13)
+        on left: 3 4
+        on right: 1 2
+    type <str> (14)
+        on left: 5 6
+        on right: 3
+    expr <str> (15)
+        on left: 7 8 9 10
+        on right: 4 7
+
+
+State 0
+
+    0 $accept: . program $end
+
+    ID     shift, and go to state 1
+    INT    shift, and go to state 2
+    FLOAT  shift, and go to state 3
+
+    program  go to state 4
+    stmt     go to state 5
+    type     go to state 6
+
+
+State 1
+
+    4 stmt: ID . ASSIGN expr SEMI
+
+    ASSIGN  shift, and go to state 7
+
+
+State 2
+
+    5 type: INT .
+
+    $default  reduce using rule 5 (type)
+
+
+State 3
+
+    6 type: FLOAT .
+
+    $default  reduce using rule 6 (type)
+
+
+State 4
+
+    0 $accept: program . $end
+    1 program: program . stmt
+
+    $end   shift, and go to state 8
+    ID     shift, and go to state 1
+    INT    shift, and go to state 2
+    FLOAT  shift, and go to state 3
+
+    stmt  go to state 9
+    type  go to state 6
+
+
+State 5
+
+    2 program: stmt .
+
+    $default  reduce using rule 2 (program)
+
+
+State 6
+
+    3 stmt: type . ID SEMI
+
+    ID  shift, and go to state 10
+
+
+State 7
+
+    4 stmt: ID ASSIGN . expr SEMI
+
+    ID         shift, and go to state 11
+    INT_NUM    shift, and go to state 12
+    FLOAT_NUM  shift, and go to state 13
+
+    expr  go to state 14
+
+
+State 8
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 9
+
+    1 program: program stmt .
+
+    $default  reduce using rule 1 (program)
+
+
+State 10
+
+    3 stmt: type ID . SEMI
+
+    SEMI  shift, and go to state 15
+
+
+State 11
+
+    8 expr: ID .
+
+    $default  reduce using rule 8 (expr)
+
+
+State 12
+
+    9 expr: INT_NUM .
+
+    $default  reduce using rule 9 (expr)
+
+
+State 13
+
+   10 expr: FLOAT_NUM .
+
+    $default  reduce using rule 10 (expr)
+
+
+State 14
+
+    4 stmt: ID ASSIGN expr . SEMI
+    7 expr: expr . OP expr
+
+    SEMI  shift, and go to state 16
+    OP    shift, and go to state 17
+
+
+State 15
+
+    3 stmt: type ID SEMI .
+
+    $default  reduce using rule 3 (stmt)
+
+
+State 16
+
+    4 stmt: ID ASSIGN expr SEMI .
+
+    $default  reduce using rule 4 (stmt)
+
+
+State 17
+
+    7 expr: expr OP . expr
+
+    ID         shift, and go to state 11
+    INT_NUM    shift, and go to state 12
+    FLOAT_NUM  shift, and go to state 13
+
+    expr  go to state 18
+
+
+State 18
+
+    7 expr: expr . OP expr
+    7     | expr OP expr .
+
+    OP  shift, and go to state 17
+
+    OP        [reduce using rule 7 (expr)]
+    $default  reduce using rule 7 (expr)
