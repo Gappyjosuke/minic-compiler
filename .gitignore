@@ -6,3 +6,8 @@
 
 # Backup files
 *~
+*.exe
+lex.yy.c
+*.tab.c
+*.tab.h
+*.output

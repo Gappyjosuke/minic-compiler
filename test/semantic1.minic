@@ -1,2 +1,0 @@
-a = 5;         // Error: 'a' not declared
-print(a);
