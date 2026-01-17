@@ -1,6 +1,6 @@
 <div align="justify">
 
-[*← Back to Expeiments Index*](/Experiments/README.md)
+[*← Back to Experiments Index*](/Experiments/README.md)
 
 
 # Experiment 03(C): Syntax Analysis - Recognizing Control Structures
@@ -87,6 +87,7 @@ This confirms that the compiler's "eyes" are now working at a structural level r
 ---
 
 [*Download Full Manual PDF*](/Docs/CompilerDesign-Lab-Manual.pdf)
+
 [*Download Full Manual DOCX*](/Docs/CompilerDesign-Lab-Manual.docx)
 
 </div>
