@@ -40,7 +40,7 @@ Before starting the experiments, you must configure your development environment
 | :---: | :--- | :--- | :---: |
 | **01** | Lexical Analyzer Implementation | C Language | [Go to Task](./1-lexical-analyzer/README.md) |
 | **02** | Lexical Analysis using LEX Tool | LEX / FLEX | [Go to Task](./2-lex-tool-implementation/README.md) |
-| **03-A** | Recognize A Valid Arithmetic Expression | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-A/README.d) |
+| **03-A** | Recognize A Valid Arithmetic Expression | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-A/README.md) |
 | **03-B** | Recognize A Valid Varibale Name | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-B/README.md) |
 | **03-C** | Recognize Control Structure | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-C/README.md) |
 | **03-D** | Calculator Using Lex ToolC  | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-D/README.md) |
