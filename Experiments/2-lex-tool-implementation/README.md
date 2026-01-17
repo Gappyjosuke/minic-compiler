@@ -84,6 +84,7 @@ Your terminal will act like a "Live Feed." As the program reads `input.c`, it wi
 
 
 [*Download Full Manual PDF*](/Docs/CompilerDesign-Lab-Manual.pdf)
+
 [*Download Full Manual DOCX*](/Docs/CompilerDesign-Lab-Manual.docx)
 
 </div>
