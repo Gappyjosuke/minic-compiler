@@ -1,6 +1,6 @@
 <div align="justify">
 
-[*← Back to Experiments Index*](/Experiments/README.md)
+[*← Back to Experiments Index*](/Experiments/)
 
 
 # Experiment 01: The Lexical Frontier (Using the LEX Tool)
