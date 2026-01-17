@@ -38,16 +38,16 @@ Before starting the experiments, you must configure your development environment
 
 | Exp No. | Experiment Name | Key Technologies | Quick Link |
 | :---: | :--- | :--- | :---: |
-| **01** | Lexical Analyzer Implementation | C Language | [Go to Task](./1-lexical-analyzer/README.md) |
-| **02** | Lexical Analysis using LEX Tool | LEX / FLEX | [Go to Task](./2-lex-tool-implementation/README.md) |
-| **03-A** | Recognize A Valid Arithmetic Expression | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-A/README.md) |
-| **03-B** | Recognize A Valid Varibale Name | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-B/README.md) |
-| **03-C** | Recognize Control Structure | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-C/README.md) |
-| **03-D** | Calculator Using Lex ToolC  | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-D/README.md) |
-| **04** | Three Address Code Generation | Intermediate Code | [Go to Task](./4-three-address-code/README.md) |
-| **05** | Type Checking Implementation | Semantic Analysis | [Go to Task](./5-type-checking/README.md) |
-| **06** | Code Optimization (Constant Folding) | Optimization | [Go to Task](./6-code-optimization/README.md) |
-| **07** | Backend Generation (8086 Assembly) | Code Generation | [Go to Task](./7-backend-8086/README.md) |
+| **01** | Lexical Analyzer Implementation | C Language | [Go to Task](./1-lexical-analyzer/) |
+| **02** | Lexical Analysis using LEX Tool | LEX / FLEX | [Go to Task](./2-lex-tool-implementation/) |
+| **03-A** | Recognize A Valid Arithmetic Expression | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-A/) |
+| **03-B** | Recognize A Valid Varibale Name | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-B/) |
+| **03-C** | Recognize Control Structure | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-C/) |
+| **03-D** | Calculator Using Lex ToolC  | YACC / BISON | [Go to Task](/Experiments/3-yacc-specifications/EXPERIMENT-3-D/) |
+| **04** | Three Address Code Generation | Intermediate Code | [Go to Task](./4-three-address-code/) |
+| **05** | Type Checking Implementation | Semantic Analysis | [Go to Task](./5-type-checking/) |
+| **06** | Code Optimization (Constant Folding) | Optimization | [Go to Task](./6-code-optimization/) |
+| **07** | Backend Generation (8086 Assembly) | Code Generation | [Go to Task](./7-backend-8086/) |
 
 </div>
 
