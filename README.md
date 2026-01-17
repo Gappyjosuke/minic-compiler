@@ -45,7 +45,7 @@ Each experiment is isolated in its own folder within `/Experiments/` for direct 
 
 ##  Usage Instructions 
 1. **Clone the Repo or Download the Zip:** `git clone https://github.com/Gappyjosuke/minic-compiler.git`
-2. **Navigate:** Go to the `experiments/` folder to find the specific task you need.
+2. **Navigate:** Go to the `Experiments/` folder to find the specific task you need.
 3. **Run:** Every folder contains a local README explaining how to compile the specific `.c` or `.l` files.
 
 ---
