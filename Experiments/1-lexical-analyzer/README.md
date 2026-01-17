@@ -70,6 +70,7 @@ After the scan, the terminal will print out every token it found. Finally, it wi
 ---
 
 [*Download Full Manual PDF*](/Docs/CompilerDesign-Lab-Manual.pdf)
+
 [*Download Full Manual DOCX*](/Docs/CompilerDesign-Lab-Manual.docx)
 
 
