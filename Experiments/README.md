@@ -1,4 +1,4 @@
-[*← Back to Home Index*](/README.md)
+[*← Back to Home Index*](/)
 
 # Laboratory Experiments Index
 
