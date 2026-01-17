@@ -1,6 +1,6 @@
 <div align="justify">
 
-[*← Back to Expeiments Index*](/Experiments/README.md)
+[*← Back to Experiments Index*](/Experiments/README.md)
 
 
 # Experiment 03(A): Syntax Analysis - The Math Decoder
@@ -77,6 +77,7 @@ If your expression is valid (like `10 / 2 + 3`), the program will print the calc
 ---
 
 [*Download Full Manual PDF*](/Docs/CompilerDesign-Lab-Manual.pdf)
+
 [*Download Full Manual DOCX*](/Docs/CompilerDesign-Lab-Manual.docx)
 
 </div>
