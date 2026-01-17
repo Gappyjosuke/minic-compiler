@@ -34,7 +34,7 @@ Each experiment is isolated in its own folder within `/Experiments/` for direct 
 
 | Section | Description | Link |
 | :--- | :--- | :---: |
-| **All Experiments** | View the index of all 7 Lab Tasks | [View Experiments](./Experiments/README.md) |
+| **All Experiments** | View the index of all 7 Lab Tasks | [View Experiments](./Experiments/) |
 | **Lab Manual** | Download the full PDF | [Download Manual PDF](/Docs/CompilerDesign-Lab-Manual.pdf) |
 | **Lab Manual** | Download the full Word Document | [Download Manual DOCX](/Docs/CompilerDesign-Lab-Manual.docx) |
 
